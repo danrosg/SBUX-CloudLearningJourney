@@ -15,6 +15,8 @@ az group list
 az account show 
 
 # Note the Subscription ID - we are going to need it later 
+# In the examples change {Your-Subscription-GUID} to your SubscriptionID
+
 
 <### Notes:
 execution policy problems - or use portal   
@@ -286,9 +288,9 @@ az network lb show -n alb -g alb
 # IMPORTANT - YOU NEED TO CHANGE THE GUID FOR THE SUBSCRIPTION ID
 # OR RESOURCE ID - IF YOU NAMED THE ALB SOMETHING ELSE. 
 # YOU CAN GET THE RESOURCE ID FROM THE PROPERTIES BLADE IN THE PORTAL + the name of backend address pool
-az network nic update -g alb --name alb-vm-01VMNic --add ipConfigurations[name=ipconfigalb-vm-01].loadBalancerBackendAddressPools id="/subscriptions/4ca08413-044e-4eef-a429-c8a894b61fe1/resourceGroups/alb/providers/Microsoft.Network/loadBalancers/ALB/backendAddressPools/ALB-bepool"
+az network nic update -g alb --name alb-vm-01VMNic --add ipConfigurations[name=ipconfigalb-vm-01].loadBalancerBackendAddressPools id="/subscriptions/{Your-Subscription-GUID}/resourceGroups/alb/providers/Microsoft.Network/loadBalancers/ALB/backendAddressPools/ALB-bepool"
 
-az network nic update -g alb --name alb-vm-02VMNic --add ipConfigurations[name=ipconfigalb-vm-02].loadBalancerBackendAddressPools id="/subscriptions/4ca08413-044e-4eef-a429-c8a894b61fe1/resourceGroups/alb/providers/Microsoft.Network/loadBalancers/ALB/backendAddressPools/ALB-bepool"
+az network nic update -g alb --name alb-vm-02VMNic --add ipConfigurations[name=ipconfigalb-vm-02].loadBalancerBackendAddressPools id="/subscriptions/{Your-Subscription-GUID}/resourceGroups/alb/providers/Microsoft.Network/loadBalancers/ALB/backendAddressPools/ALB-bepool"
 
 # az network nic update -g ${resource-group} --name ${nic-name} --add ipConfigurations[name=${ip-config}].loadBalancerBackendAddressPools id=${backend-address-pool-id}
 
@@ -337,7 +339,7 @@ az network public-ip show -n ALB-ip00 -g alb
 
 ## NOTE: Endpoints need to be edited and updated for following to work
 
-az network traffic-manager endpoint create --name mytm1 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/4ca08413-044e-4eef-a429-c8a894b61fe1/resourceGroups/alb/providers/Microsoft.Network/publicIPAddresses/ALB-ip00" 
+az network traffic-manager endpoint create --name mytm1 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/{Your-Subscription-GUID}/resourceGroups/alb/providers/Microsoft.Network/publicIPAddresses/ALB-ip00" 
 
 # =========================================
 
@@ -345,7 +347,7 @@ az network public-ip show -n AGW-ip01 -g agw
 
 ## NOTE: Endpoint needs to be edited for the following to work.
 
-az network traffic-manager endpoint create --name mytm2 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/4ca08413-044e-4eef-a429-c8a894b61fe1/resourceGroups/agw/providers/Microsoft.Network/publicIPAddresses/agw-ip01" 
+az network traffic-manager endpoint create --name mytm2 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/{Your-Subscription-GUID}/resourceGroups/agw/providers/Microsoft.Network/publicIPAddresses/agw-ip01" 
 
 # Test Traffic MGR
 
@@ -402,3 +404,4 @@ CLI 2.0 completed these scenarios:
 - Traffic Manager 
 #> 
 
+ 
