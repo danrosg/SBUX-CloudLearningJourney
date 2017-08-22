@@ -1,4 +1,4 @@
-﻿##############################################################################
+##############################################################################
 
 #  CLI 2.0 Examples - Equivalent exercise to Powershell ALB/AGW exercise     #
 
@@ -54,10 +54,10 @@ az group create --name AGW --location eastus
 ##############################################################
 
 # Create a new premium storage account for our vm's (name must be unique in AZ)
-az storage account create --name agwstoragesankolke01 --location eastus --resource-group agw --sku premium_lrs
+az storage account create --name agwstoragesankbolke01 --location eastus --resource-group agw --sku premium_lrs
 
 # create standard storage account for boot diagnostics (name must be unique in AZ)
-az storage account create --name agwstoragesankolke02 --location eastus --resource-group agw --sku standard_lrs
+az storage account create --name agwstoragesankoelke02 --location eastus --resource-group agw --sku standard_lrs
 
 az storage account list --output table 
 
@@ -83,8 +83,8 @@ az network nsg rule list --resource-group agw --nsg-name agw-nsg --output table
 ##########################################################
 # create public ip addresses for resources 2 vm's (DNS names - unique)
 
-az network public-ip create --name agw-ip01 --resource-group agw --allocation-method static --dns-name agwvmipk01 --location eastus 
-az network public-ip create --name agw-ip02 --resource-group agw --allocation-method static --dns-name agwvmipk02 --location eastus 
+az network public-ip create --name agw-ip01 --resource-group agw --allocation-method static --dns-name agwvmipsk01 --location eastus 
+az network public-ip create --name agw-ip02 --resource-group agw --allocation-method static --dns-name agwvmipks02 --location eastus 
 
 # Get Public IP Address
 az network public-ip list --output table 
@@ -128,10 +128,12 @@ az network public-ip list --output table
 ## RDP connection
 mstsc /v: ${ipaddresses}
 
+start chrome http://{ip-address-agw} or {dns.cloudapp.net}
+
 # start and stop VM's to demonstrate AGW working
 
 az vm stop -g agw -n agw-vm-02
-az vm start –g agw –n agw-vm-01
+az vm start -g agw -n agw-vm-01
 
 # Common CLI for linux 
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/cli-manage
@@ -172,10 +174,10 @@ az group create --name ALB --location westus
 ##############################################################
 
 # Create a new premium storage account for our vm's (name must be unique in AZ)
-az storage account create --name albstoragesank01 --location westus --resource-group alb --sku premium_lrs
+az storage account create --name albstoragesavnk01 --location westus --resource-group alb --sku premium_lrs
 
 # create standard storage account for boot diagnostics (name must be unique in AZ)
-az storage account create --name albstoragesank02 --location westus --resource-group alb --sku standard_lrs
+az storage account create --name albstoragesanwk02 --location westus --resource-group alb --sku standard_lrs
 
 az storage account list --output table 
 
@@ -199,12 +201,10 @@ az network nsg rule list --resource-group agw --nsg-name agw-nsg --output table
 # create new virtual network & subnet 10.0.0.0/24 
 az network vnet create --name ALB-VNet --resource-group alb --address-prefixes 10.0.0.0/16 --location westus --subnet-name ALB --subnet-prefix 10.0.0.0/24 
 
-# Store the virtual network object in a variable (FrontEnd01) 
-
 # -Name FrontEnd01 -AddressPrefix 10.0.1.0/24
 az network vnet subnet create --address-prefix 10.0.1.0/24 --name FrontEnd01 --resource-group alb --vnet-name ALB-VNet
 
-# -Name FrontEnd02 -AddressPrefix 10.0.1.0/24
+# -Name FrontEnd02 -AddressPrefix 10.0.2.0/24
 az network vnet subnet create --address-prefix 10.0.2.0/24 --name FrontEnd02 --resource-group alb --vnet-name ALB-VNet
 
 
@@ -232,8 +232,8 @@ az resource list -g alb --output table
 #  Create Azure Load Balancing                                           #
 
 # create IP Addresses for new VM's for ALB
-az network public-ip create --name alb-ip01 --resource-group alb --allocation-method static --dns-name albvmipko01 --location westus 
-az network public-ip create --name alb-ip02 --resource-group alb --allocation-method static --dns-name albvmipko02 --location westus 
+az network public-ip create --name alb-ip01 --resource-group alb --allocation-method static --dns-name albvmipvko01 --location westus 
+az network public-ip create --name alb-ip02 --resource-group alb --allocation-method static --dns-name albvmipvko02 --location westus 
 
 
 # create availability set for 2 vm's
@@ -298,7 +298,6 @@ az network nic update -g alb --name alb-vm-02VMNic --add ipConfigurations[name=i
 az network lb probe create -g alb --lb-name ALB -n healthprobe01 --protocol tcp --port 80  
 
 # loadbalancing rule 
-
 az network lb rule create --backend-port 80 --frontend-port 80 --lb-name ALB --name lbrule01 --protocol tcp -g alb --backend-pool-name ALB-bepool --frontend-ip-name ALB-ip00 --probe-name healthprobe01 
 
 # az network lb rule delete --name lbrule01 -g alb --lb-name ALB
@@ -333,11 +332,11 @@ https://docs.microsoft.com/en-us/cli/azure/network/traffic-manager
 
 az group create -n traffic -l westus 
 
-az network traffic-manager profile create --name trafficmgr --resource-group traffic --routing-method performance --unique-dns-name kolketmgrdemo23 
+az network traffic-manager profile create --name trafficmgr --resource-group traffic --routing-method performance --unique-dns-name kolketmgrdemo234 
 
 az network public-ip show -n ALB-ip00 -g alb 
 
-## NOTE: Endpoints need to be edited and updated for following to work
+## NOTE: Endpoints need to be edited with your subscription GUID for following to work
 
 az network traffic-manager endpoint create --name mytm1 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/{Your-Subscription-GUID}/resourceGroups/alb/providers/Microsoft.Network/publicIPAddresses/ALB-ip00" 
 
@@ -345,7 +344,7 @@ az network traffic-manager endpoint create --name mytm1 --profile-name trafficmg
 
 az network public-ip show -n AGW-ip01 -g agw
 
-## NOTE: Endpoint needs to be edited for the following to work.
+## NOTE: Endpoint needs to be edited with your Subscription GUId for the following to work.
 
 az network traffic-manager endpoint create --name mytm2 --profile-name trafficmgr --resource-group traffic --type azureEndpoints --target-resource-id "/subscriptions/{Your-Subscription-GUID}/resourceGroups/agw/providers/Microsoft.Network/publicIPAddresses/agw-ip01" 
 
@@ -385,7 +384,7 @@ az vm start -g agw -n agw-vm-02
 az network traffic-manager profile update --name trafficmgr --resource-group traffic --status enabled
 
 
-start chrome http://kolketmgrdemo23.trafficmanager.net
+start chrome http://kolketmgrdemo234.trafficmanager.net
 
 
 #############################################################################
@@ -404,4 +403,3 @@ CLI 2.0 completed these scenarios:
 - Traffic Manager 
 #> 
 
- 
