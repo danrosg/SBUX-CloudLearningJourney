@@ -3,6 +3,9 @@
 # Edit paramaters 
 # change directory to location of template 
 
+# Make sure you are logged in   
+Login-AzureRMAccount
+
 # use to validate a template for deployment
 Test-AzureRmResourceGroupDeployment -Name ExampleDeployment -ResourceGroupName ExampleResourceGroup `
 -TemplateFile c:\MyTemplates\storage.json `
