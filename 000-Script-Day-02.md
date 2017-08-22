@@ -44,6 +44,10 @@ Other concepts
 Iaas vs paas offerings - serverless
 Microservices
 Containers
+Decoupling 
+Circuit breaker pattern
+NoSQL 
+
 
 
 So day two three and four, we are going to shift responsibility for learning and labs to you. 
