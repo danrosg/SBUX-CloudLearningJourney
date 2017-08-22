@@ -1,4 +1,4 @@
-﻿#####################################################################
+#####################################################################
 
 #         POWERSHELL EXAMPLES 1.1                                   #
 
@@ -6,7 +6,7 @@
 
 cls
 
-#Login to Az Account
+#Login to Az Account (Note RM in syntax. This is for Resource Manager Login)
 Login-AzureRmAccount
 
 Get-AzureRmADUser
@@ -60,10 +60,10 @@ New-AzureRMResourceGroup -name AGWPS -location eastus
 # Create a new premium storage account.
 
 # !!!  Storage account names must be unique !!! 
-New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan01 -Location eastus -ResourceGroupName AGWPS -SkuName Premium_LRS
+New-AzureRmStorageAccount –StorageAccountName agwpsstoragetoeueu01 -Location eastus -ResourceGroupName AGWPS -SkuName Premium_LRS
 
 # create standard storage account for boot diagnostics 
-New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan02 -Location eastus -ResourceGroupName AGWPS -SkuName Standard_LRS
+New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan234e02 -Location eastus -ResourceGroupName AGWPS -SkuName Standard_LRS
 
 ##########################################################
 
@@ -95,10 +95,10 @@ $nsg
 ###########################################################
 
 New-AzureRmPublicIpAddress -Name agwpsvm-ip01 -ResourceGroupName agwps  `
--AllocationMethod Static -DomainNameLabel agwpsvmip01 -Location eastus
+-AllocationMethod Static -DomainNameLabel agwpseuvmip01 -Location eastus
 
 New-AzureRmPublicIpAddress -Name agwpsvm-ip02 -ResourceGroupName agwps  `
--AllocationMethod Static -DomainNameLabel agwpsvmip02 -Location eastus
+-AllocationMethod Static -DomainNameLabel agwpsvmipui02 -Location eastus
 
 # Create IP for AGW (must be dynamic)
 New-AzureRmPublicIpAddress -Name AGWpsPubip -ResourceGroupName agwps  `
@@ -269,23 +269,21 @@ cls
 #######################################################################
 
 
-
 #   Create Resource group for ALBPS scenario
 cls
 
 New-AzureRMResourceGroup -name ALBPS -location westus
 
 
-
 ###################################################
 
 # Create a new premium storage account.
 
-New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn01 -Location westus `
+New-AzureRmStorageAccount –StorageAccountName albpsstorageskavn01 -Location westus `
 -ResourceGroupName ALBPS -SkuName Premium_LRS
 
 # create standard storage account for boot diagnostics 
-New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn02 -Location westus `
+New-AzureRmStorageAccount –StorageAccountName albpsstoragesakvn02 -Location westus `
 -ResourceGroupName ALBPS -SkuName Standard_LRS
 
 
@@ -300,13 +298,13 @@ New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn02 -Location wes
 # NSG rules
 $rule1 = New-AzureRmNetworkSecurityRuleConfig -Name web-rule -Description "Allow HTTP" `
 -Access Allow -Protocol Tcp -Direction Inbound -Priority 101 `
--SourceAddressPrefix Internet -SourcePortRange * -DestinationAddressPrefix * `
+-SourceAddressPrefix Internet -SourcePortRange "*" -DestinationAddressPrefix "*" `
 -DestinationPortRange 80
 
 $rule2 = New-AzureRmNetworkSecurityRuleConfig -Name rdp-rule -Description "Allow RDP" `
 -Access Allow -Protocol Tcp -Direction Inbound -Priority 100 `
--SourceAddressPrefix Internet -SourcePortRange * `
--DestinationAddressPrefix * -DestinationPortRange 3389
+-SourceAddressPrefix Internet -SourcePortRange "*" `
+-DestinationAddressPrefix "*" -DestinationPortRange 3389
 
 $nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName albps -Location westus `
 -Name "albps-nsg" -SecurityRules $rule1,$rule2
@@ -358,14 +356,14 @@ Get-AzureRmResource | select name, resourcetype, resourcegroupname, location
 # create ip addresses for vm's
 
 New-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps  `
--AllocationMethod Static -DomainNameLabel albpsvmip01 -Location westus
+-AllocationMethod Static -DomainNameLabel albpsvkmip01 -Location westus
 
 New-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps  `
--AllocationMethod Static -DomainNameLabel albpsvmip02 -Location westus
+-AllocationMethod Static -DomainNameLabel albpsvmkip02 -Location westus
 
 # Create IP for ALB 
 New-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps `
--AllocationMethod Static -Location westus -DomainNameLabel albpspubip
+-AllocationMethod Static -Location westus -DomainNameLabel albpspubkip
 
 # Get Public IP Address
 Get-AzureRmPublicIpAddress -ResourceGroupName albps | select name, ipaddress 
@@ -539,7 +537,7 @@ get-azurermpublicipaddress | select name, ipaddress
 # Relative DNS Name needs to be unique in Azure global
 $profile = New-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile `
 -ResourceGroupName TrafficPS -TrafficRoutingMethod Weighted `
--RelativeDnsName kolketrafficpsdemo -Ttl 30 -MonitorProtocol `
+-RelativeDnsName kolketrafficpshdemo -Ttl 30 -MonitorProtocol `
 HTTP -MonitorPort 80 -MonitorPath "/"
 
 $ip1 = Get-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps
@@ -553,7 +551,7 @@ New-AzureRmTrafficManagerEndpoint -Name AGWPS -ProfileName MyTrafficMgrProfile `
  -EndpointStatus Enabled
 
 #make sure you change subdomain name to match TM profile name
-start-process http://kolketrafficpsdemo.trafficmanager.net
+start-process http://kolketrafficpshdemo.trafficmanager.net
 
 # More about trafficmgr and powershell
 # https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-powershell-arm#create-a-traffic-manager-profile
@@ -621,3 +619,5 @@ powershell completed these scenarios:
 # - monitoring 
 # - security
 # - view resources in portal 
+ 
+ 
