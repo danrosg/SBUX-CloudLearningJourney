@@ -1,35 +1,36 @@
 # Azure Service Principals
 
-<ul>
-<li>Simple explanation: Used to created trusted relationship between applications and Azure
-<li>Managed through Azure Active Directory 
-<li>Azure Active Directory manages User access and application access to Azure and linked applications
-</ul>
+* Simple explanation: Used to created trusted relationship between applications and Azure
+* Managed through Azure Active Directory 
+* Azure Active Directory manages User access and application access to Azure and linked applications
 
 ## Examples
 * Web App that needs to access Key Vault for secrets
 * Jenkins implementation that needs to access Azure to build / deploy
 * Development pipeline - same 
 
-<i>The long form... </i> taken from this documentation... https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
+<i>The long form... </i> taken from this documentation...<br> 
+https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
 
-
-# Application and service principal objects in Azure AD
-
-Sometimes the meaning of the term "application" can be misunderstood when used in the context of Azure AD. The goal of this article is to make it clearer, by clarifying conceptual and concrete aspects of Azure AD application integration, with an illustration of registration and consent for a multi-tenant application.
 
 # Overview
+By definition, an application can function in:
+* a client role (consuming a resource)
+* a resource server role (exposing APIs to clients), 
+* or even both. 
 
-An application that has been integrated with Azure AD has implications that go beyond the software aspect. "Application" is frequently used as a conceptual term, referring to not only the the application software, but also its Azure AD registration and role in authentication/authorization "conversations" at runtime. By definition, an application can function in a client role (consuming a resource), a resource server role (exposing APIs to clients), or even both. The conversation protocol is defined by an OAuth 2.0 Authorization Grant flow, allowing the client/resource to access/protect a resource's data respectively. Now let's go a level deeper, and see how the Azure AD application model represents an application at design-time and run-time.
+The conversation protocol is defined by an OAuth 2.0 Authorization Grant flow, allowing the client/resource to access/protect a resource's data respectively. 
 
 ## Application registration
 
-When you register an Azure AD application in the Azure portal, two objects are created in your Azure AD tenant: an application object, and a service principal object.
-Application object
+When you register an Azure AD application in the Azure portal, two objects are created in your Azure AD tenant;
+1. an application object, 
+2. a service principal object.
 
+## Application object
 An Azure AD application is defined by its one and only application object, which resides in the Azure AD tenant where the application was registered, known as the application's "home" tenant. The Azure AD Graph Application entity defines the schema for an application object's properties.
-Service principal object
 
+## Service principal object
 The service principal object defines the policy and permissions for an application's use in a specific tenant, providing the basis for a security principal to represent the application at run-time. The Azure AD Graph ServicePrincipal entity defines the schema for a service principal object's properties.
 Application and service principal relationship
 
