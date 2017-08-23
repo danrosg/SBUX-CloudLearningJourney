@@ -1,5 +1,15 @@
 https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
 
+# Azure Service Principals
+
+<ul>
+<li>Simple explanation: Used to created trusted relationship between applications and Azure
+<li>Managed through Azure Active Directory 
+<li>Azure Active Directory manages User access and application access to Azure and linked applications
+</ul>
+
+<i>The long form... </i>
+
 # Application and service principal objects in Azure AD
 
 Sometimes the meaning of the term "application" can be misunderstood when used in the context of Azure AD. The goal of this article is to make it clearer, by clarifying conceptual and concrete aspects of Azure AD application integration, with an illustration of registration and consent for a multi-tenant application.
