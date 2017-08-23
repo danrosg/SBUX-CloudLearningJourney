@@ -6,8 +6,13 @@
 
 Key Vault streamlines the key management process and enables you to maintain control of keys that access and encrypt your data.
 
-Key Vault has both Hardward backed, and software backed keys. Hardware aka HSM (Hardware Security Module)
-HSM's are more expensive.
+## Key Vault has: 
+* Hardward backed, 
+* and software backed keys. 
+
+<i> Hardware aka HSM (Hardware Security Module)</i>. Note: HSM's are more expensive.
+
+<hr>
 
 ## Examples of Keys and Secrets
 * Passwords and Account Information for Application use
