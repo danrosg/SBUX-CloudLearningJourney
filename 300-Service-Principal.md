@@ -50,3 +50,10 @@ The following diagram illustrates the relationship between an application's appl
 An application's application object can be accessed via the Azure AD Graph API, the Azure portal's application manifest editor, or Azure AD PowerShell cmdlets, as represented by its OData Application entity.
 An application's service principal object can be accessed via the Azure AD Graph API or Azure AD PowerShell cmdlets, as represented by its OData ServicePrincipal entity.
 The Azure AD Graph Explorer is useful for querying both the application and service principal objects.
+
+<ul>Create a SP with Powershell<br>
+https://docs.microsoft.com/en-us/powershell/azure/create-azure-service-principal-azureps?view=azurermps-4.3.1
+<ul>Create a SP with CLI 2.0</br>
+https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?toc=%2fazure%2fazure-resource-manager%2ftoc.json
+<ul>Portal<br>
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal
