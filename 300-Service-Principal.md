@@ -6,6 +6,11 @@
 <li>Azure Active Directory manages User access and application access to Azure and linked applications
 </ul>
 
+## Examples
+* Web App that needs to access Key Vault for secrets
+* Jenkins implementation that needs to access Azure to build / deploy
+* Development pipeline - same 
+
 <i>The long form... </i> taken from this documentation... https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
 
 
