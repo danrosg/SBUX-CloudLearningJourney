@@ -37,7 +37,7 @@ The following diagram illustrates the relationship between an application's appl
 <li> Fabrikam - the tenant used by the Fabrikam organization, which also consumes the HR app Relationship between an application object and a service principal object
 </ol>
 
-<img src="https://docs.microsoft.com/en-us/azure/active-directory/develop/media/active-directory-application-objects/application-objects-relationship.png" width="300">
+<img src="https://docs.microsoft.com/en-us/azure/active-directory/develop/media/active-directory-application-objects/application-objects-relationship.png" maxwidth="900">
 
 <b>Step 1</b> is the process of creating the application and service principal objects in the application's home tenant.
 
