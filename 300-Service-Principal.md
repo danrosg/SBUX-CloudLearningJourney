@@ -31,15 +31,19 @@ Also note that native applications are registered as multi-tenant by default.
 ## Example
 The following diagram illustrates the relationship between an application's application object and corresponding service principal objects, in the context of a sample multi-tenant application called HR app. There are three Azure AD tenants in this scenario:
 
-* 1. Adatum - the tenant used by the company that developed the HR app
-* 2. Contoso - the tenant used by the Contoso organization, which is a consumer of the HR app
-* 3. Fabrikam - the tenant used by the Fabrikam organization, which also consumes the HR app Relationship between an application object and a service principal object
+<ol>
+<li> Adatum - the tenant used by the company that developed the HR app
+<li> Contoso - the tenant used by the Contoso organization, which is a consumer of the HR app
+<li> Fabrikam - the tenant used by the Fabrikam organization, which also consumes the HR app Relationship between an application object and a service principal object
+</ol>
 
-Step 1 is the process of creating the application and service principal objects in the application's home tenant.
+<img src="https://docs.microsoft.com/en-us/azure/active-directory/develop/media/active-directory-application-objects/application-objects-relationship.png" width="300">
 
-Step 2, when Contoso and Fabrikam administrators complete consent, a service principal object is created in their company's Azure AD tenant and assigned the permissions that the administrator granted. Also note that the HR app could be configured/designed to allow consent by users for individual use.
+<b>Step 1</b> is the process of creating the application and service principal objects in the application's home tenant.
 
-Step 3, the consumer tenants of the HR application (Contoso and Fabrikam) each have their own service principal object. Each represents their use of an instance of the application at runtime, governed by the permissions consented by the respective administrator.
+<b>Step 2</b>, when Contoso and Fabrikam administrators complete consent, a service principal object is created in their company's Azure AD tenant and assigned the permissions that the administrator granted. Also note that the HR app could be configured/designed to allow consent by users for individual use.
+
+<b>Step 3</b>, the consumer tenants of the HR application (Contoso and Fabrikam) each have their own service principal object. Each represents their use of an instance of the application at runtime, governed by the permissions consented by the respective administrator.
 
 ## Next steps
 
