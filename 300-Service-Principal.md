@@ -1,5 +1,3 @@
-https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
-
 # Azure Service Principals
 
 <ul>
@@ -8,7 +6,8 @@ https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory
 <li>Azure Active Directory manages User access and application access to Azure and linked applications
 </ul>
 
-<i>The long form... </i>
+<i>The long form... </i> taken from this documentation... https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-application-objects
+
 
 # Application and service principal objects in Azure AD
 
