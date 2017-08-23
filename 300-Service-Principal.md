@@ -28,11 +28,18 @@ When you register an Azure AD application in the Azure portal, two objects are c
 2. a service principal object.
 
 ## Application object
-An Azure AD application is defined by its one and only application object, which resides in the Azure AD tenant where the application was registered, known as the application's "home" tenant. The Azure AD Graph Application entity defines the schema for an application object's properties.
+* An Azure AD application is defined by <u>one</u> application object which resides in the Azure AD tenant where the application was registered.
+* This is known as the application's "home" tenant. 
+* The Azure AD Graph Application entity defines the schema for an application object's properties.
 
 ## Service principal object
-The service principal object defines the policy and permissions for an application's use in a specific tenant, providing the basis for a security principal to represent the application at run-time. The Azure AD Graph ServicePrincipal entity defines the schema for a service principal object's properties.
-Application and service principal relationship
+* The service principal object defines the policy and permissions for an application's use in a specific tenant,
+* providing the basis for a security principal to represent the application at run-time. 
+* The Azure AD Graph ServicePrincipal entity defines the schema for a service principal object's properties.
+
+<hr>
+
+## Application and service principal relationship
 
 Consider the application object as the global representation of your application for use across all tenants, and the service principal as the local representation for use in a specific tenant. The application object serves as the template from which common and default properties are derived for use in creating corresponding service principal objects. An application object therefore has a 1:1 relationship with the software application, and a 1:many relationship with its corresponding service principal object(s).
 
