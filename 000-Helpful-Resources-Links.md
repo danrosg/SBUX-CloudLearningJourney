@@ -11,6 +11,8 @@ https://github.com/Azure/azure-quickstart-templates
 ## Learning Paths (super cool!)
 https://azure.microsoft.com/en-us/documentation/learning-paths 
 
+https://www.microsoft.com/en-us/learning/azure-training.aspx
+
 # Links:
 
 # Java 
