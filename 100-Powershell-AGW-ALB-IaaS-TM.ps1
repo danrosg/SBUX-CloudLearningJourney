@@ -111,6 +111,7 @@ Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 
 ######## Sidebar ######################################################
 ### Get a list of all VM images that are available in a region    #####
+
 #######################################################################
 
 
@@ -161,9 +162,9 @@ $pip2 = Get-AzureRmPublicIpAddress -Name agwpsvm-ip02 -ResourceGroupName AGWPS
 # install webserver tools - run powershell on windows vm - copy & run on VMS
 # Install-WindowsFeature -name Web-Server -IncludeManagementTools
 
-# Also, edit webserver homepage with name of each machine so we can identify in tests
+# Also, edit VM's webserver homepage with name of each machine so we can identify in tests
 # c:\inetpub\wwwroot\iistart.html
-#  ie.  <h1>AGW-VM-01</h1> vs <h1>AGW-VM-02</h1>
+#  ie.  <h1>AGW-PS-VM-01</h1> vs <h1>AGW-PS-VM-02</h1>
 
 ## RDP connection
 mstsc /v: $pip1.IpAddress
@@ -627,4 +628,3 @@ Get-AzureRmResource | Where-Object { $_.ResourceGroupName -CLike "*blah*"} | sel
 # Remove-AzureRmResourceGroup -Name blah
 
 Start-Process -FilePath "http://portal.azure.com" 
-
