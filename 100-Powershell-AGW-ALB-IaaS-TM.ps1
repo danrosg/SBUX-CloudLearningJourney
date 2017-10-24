@@ -6,39 +6,9 @@
 
 cls
 
-#Login to Az Account (Note RM in syntax. This is for Resource Manager Login)
+#Login to Az Account
 Login-AzureRmAccount
 
-Get-AzureRmADUser
-
-### execution policy problems?
-# execution scope policy info
-Get-ExecutionPolicy -list
-# bypass 
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-# current user allsigned-force ### - great for workshop
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy AllSigned -Force
-
-
-#get resource groups
-Get-AzureRmResourceGroup
-
-#get resources
-Get-AzureRMResource 
-
-Get-AzureRmResource | select name, kind, location
-Get-AzureRmResource | select name, resourcetype, resourcegroupname,location
-
-#get resources in specific resource group 
-Get-AzureRmResource | Where-Object { $_.ResourceGroupName -eq "myjenkins"}
-Get-AzureRmResource | ? { $_.Name -like "*blah*"}
-#Contains Like - CLike - case sensitive plus *
-Get-AzureRmResource | Where-Object { $_.ResourceGroupName -CLike "*blah*"} | select name, resourcetype
-
-#delete resource group (and all the resources therein) 
-# Remove-AzureRmResourceGroup -Name blah
-
-Start-Process -FilePath "http://portal.azure.com" 
 
 ####################################################
 
@@ -59,11 +29,11 @@ New-AzureRMResourceGroup -name AGWPS -location eastus
 
 # Create a new premium storage account.
 
-# !!!  Storage account names must be unique !!! 
-New-AzureRmStorageAccount –StorageAccountName agwpsstoragetoeueu01 -Location eastus -ResourceGroupName AGWPS -SkuName Premium_LRS
+# !!!  Storage account names must be unique !!! ******ADD code to check available name
+New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan01 -Location eastus -ResourceGroupName AGWPS -SkuName Premium_LRS
 
 # create standard storage account for boot diagnostics 
-New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan234e02 -Location eastus -ResourceGroupName AGWPS -SkuName Standard_LRS
+New-AzureRmStorageAccount –StorageAccountName agwpsstoragesan02 -Location eastus -ResourceGroupName AGWPS -SkuName Standard_LRS
 
 ##########################################################
 
@@ -88,17 +58,16 @@ $nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName agwps -Location eastus
 -Name "agwps-nsg" -SecurityRules $rule1,$rule2
 
 $nsg
-
-
+ 
 ###########################################################
 # create public ip addresses for resources
 ###########################################################
 
 New-AzureRmPublicIpAddress -Name agwpsvm-ip01 -ResourceGroupName agwps  `
--AllocationMethod Static -DomainNameLabel agwpseuvmip01 -Location eastus
+-AllocationMethod Static -DomainNameLabel agwpsvmip01 -Location eastus
 
 New-AzureRmPublicIpAddress -Name agwpsvm-ip02 -ResourceGroupName agwps  `
--AllocationMethod Static -DomainNameLabel agwpsvmipui02 -Location eastus
+-AllocationMethod Static -DomainNameLabel agwpsvmip02 -Location eastus
 
 # Create IP for AGW (must be dynamic)
 New-AzureRmPublicIpAddress -Name AGWpsPubip -ResourceGroupName agwps  `
@@ -111,9 +80,11 @@ Get-AzureRmPublicIpAddress -ResourceGroupName agwps | select name, ipaddress
 
 
 ##############################################################
+#
 ## create new vnet for app gateway
 ## subnet for vms
 ## add vms to that subnet 
+#
 
 $Subnet = New-AzureRmVirtualNetworkSubnetConfig -Name "AGWPSSubnet" -AddressPrefix 10.0.0.0/24
 # this is the key. subnets and vnets... 
@@ -124,7 +95,7 @@ $VNet = Get-AzureRmvirtualNetwork -Name "AGWPSVnet" -ResourceGroupName "AGWPS"
 
 ##############################################################
 
-### create 2 vm's in vnet
+### We are going to create 2 vm's in vnet / subnet / availability set
 
 # create new availability set 
 New-AzureRmAvailabilitySet -ResourceGroupName "AGWPS" -Name "AGWPS-ASet" -Location eastus `
@@ -192,7 +163,7 @@ $pip2 = Get-AzureRmPublicIpAddress -Name agwpsvm-ip02 -ResourceGroupName AGWPS
 
 # Also, edit webserver homepage with name of each machine so we can identify in tests
 # c:\inetpub\wwwroot\iistart.html
-#  ie.  <h1>AGW-VM-01</h1>
+#  ie.  <h1>AGW-VM-01</h1> vs <h1>AGW-VM-02</h1>
 
 ## RDP connection
 mstsc /v: $pip1.IpAddress
@@ -269,21 +240,23 @@ cls
 #######################################################################
 
 
+
 #   Create Resource group for ALBPS scenario
 cls
 
-New-AzureRMResourceGroup -name ALBPS -location westus
+New-AzureRMResourceGroup -name ALBPS -location westus2
+
 
 
 ###################################################
 
 # Create a new premium storage account.
 
-New-AzureRmStorageAccount –StorageAccountName albpsstorageskavn01 -Location westus `
+New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn01 -Location westus2 `
 -ResourceGroupName ALBPS -SkuName Premium_LRS
 
 # create standard storage account for boot diagnostics 
-New-AzureRmStorageAccount –StorageAccountName albpsstoragesakvn02 -Location westus `
+New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn02 -Location westus2 `
 -ResourceGroupName ALBPS -SkuName Standard_LRS
 
 
@@ -298,15 +271,15 @@ New-AzureRmStorageAccount –StorageAccountName albpsstoragesakvn02 -Location we
 # NSG rules
 $rule1 = New-AzureRmNetworkSecurityRuleConfig -Name web-rule -Description "Allow HTTP" `
 -Access Allow -Protocol Tcp -Direction Inbound -Priority 101 `
--SourceAddressPrefix Internet -SourcePortRange "*" -DestinationAddressPrefix "*" `
+-SourceAddressPrefix Internet -SourcePortRange * -DestinationAddressPrefix * `
 -DestinationPortRange 80
 
 $rule2 = New-AzureRmNetworkSecurityRuleConfig -Name rdp-rule -Description "Allow RDP" `
 -Access Allow -Protocol Tcp -Direction Inbound -Priority 100 `
--SourceAddressPrefix Internet -SourcePortRange "*" `
--DestinationAddressPrefix "*" -DestinationPortRange 3389
+-SourceAddressPrefix Internet -SourcePortRange * `
+-DestinationAddressPrefix * -DestinationPortRange 3389
 
-$nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName albps -Location westus `
+$nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName albps -Location westus2 `
 -Name "albps-nsg" -SecurityRules $rule1,$rule2
 
 $nsg
@@ -315,7 +288,7 @@ $nsg
 ##############################################################
 # create new virtual network 
 New-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet `
--AddressPrefix 10.0.0.0/16 -Location westus
+-AddressPrefix 10.0.0.0/16 -Location westus2
 
 # Store the virtual network object in a variable:
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet
@@ -356,26 +329,26 @@ Get-AzureRmResource | select name, resourcetype, resourcegroupname, location
 # create ip addresses for vm's
 
 New-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps  `
--AllocationMethod Static -DomainNameLabel albpsvkmip01 -Location westus
+-AllocationMethod Static -DomainNameLabel albpsvmip01 -Location westus2
 
 New-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps  `
--AllocationMethod Static -DomainNameLabel albpsvmkip02 -Location westus
+-AllocationMethod Static -DomainNameLabel albpsvmip02 -Location westus2
 
 # Create IP for ALB 
 New-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps `
--AllocationMethod Static -Location westus -DomainNameLabel albpspubkip
+-AllocationMethod Static -Location westus2 -DomainNameLabel albpspubip
 
 # Get Public IP Address
 Get-AzureRmPublicIpAddress -ResourceGroupName albps | select name, ipaddress 
+Get-AzureRMResource | Where-Object {$_.name -like "*albps*"} | select name, ipaddress
 
-Get-AzureRMResource | ? {$_.name -eq "ALBps"} 
 
 ##########################################################
 
 # create 2 vm's in availability set using just powershell 
 
 # create availability set 
-New-AzureRmAvailabilitySet -ResourceGroupName "albps" -Name "ALBps-ASet" -Location westus `
+New-AzureRmAvailabilitySet -ResourceGroupName "albps" -Name "ALBps-ASet" -Location westus2 `
 -PlatformFaultDomainCount 2 -PlatformUpdateDomainCount 2 -Sku Aligned
 
 # VM1 - creating nic then vm 
@@ -383,7 +356,7 @@ $AvailabilitySet = Get-AzureRmAvailabilitySet -ResourceGroupName albps -name ALB
 $vnet = Get-AzureRmVirtualNetwork -Name ALBPS-VNet -ResourceGroupName albps 
 $nsg = Get-AzureRmNetworkSecurityGroup -name ALBps-nsg -ResourceGroupName albps
 $pip = Get-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps 
-$nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-01 -ResourceGroupName albps -Location westus `
+$nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-01 -ResourceGroupName albps -Location westus2 `
     -SubnetId $vnet.Subnets[0].Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
 
 # Create a virtual machine configuration. This configuration includes the settings that are used
@@ -395,14 +368,14 @@ $nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-01 -ResourceGroupName albps 
 $cred = Get-Credential
 
 # Create a virtual machine configuration
-$vmConfig = New-AzureRmVMConfig -VMName albpsvm-01 -VMSize Standard_DS1 -AvailabilitySetID $AvailabilitySet.Id | `
+$vmConfig = New-AzureRmVMConfig -VMName albpsvm-01 -VMSize Standard_DS1_v2 -AvailabilitySetID $AvailabilitySet.Id | `
     Set-AzureRmVMOperatingSystem -Windows -ComputerName albpsvm-01 -Credential $cred | `
     Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer `
     -Skus 2016-Datacenter -Version latest | Add-AzureRmVMNetworkInterface -Id $nic.Id 
     
 # Create the virtual machine with New-AzureRmVM.
 # Note: Long running process 
-New-AzureRmVM -ResourceGroupName albps -Location westus -VM $vmConfig
+New-AzureRmVM -ResourceGroupName albps -Location westus2 -VM $vmConfig
 
 ##########################################################################
 # VM 2 - repeat of above 
@@ -411,15 +384,15 @@ $AvailabilitySet = Get-AzureRmAvailabilitySet -ResourceGroupName albps -name ALB
 $vnet = Get-AzureRmVirtualNetwork -Name ALBPS-VNet -ResourceGroupName albps 
 $nsg = Get-AzureRmNetworkSecurityGroup -name ALBps-nsg -ResourceGroupName albps
 $pip = Get-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps 
-$nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-02 -ResourceGroupName albps -Location westus `
+$nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-02 -ResourceGroupName albps -Location westus2 `
     -SubnetId $vnet.Subnets[0].Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
 $cred = Get-Credential
-$vmConfig = New-AzureRmVMConfig -VMName albpsvm-02 -VMSize Standard_DS1 -AvailabilitySetID $AvailabilitySet.Id | `
+$vmConfig = New-AzureRmVMConfig -VMName albpsvm-02 -VMSize Standard_DS1_v2 -AvailabilitySetID $AvailabilitySet.Id | `
     Set-AzureRmVMOperatingSystem -Windows -ComputerName albpsvm-02 -Credential $cred | `
     Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer `
     -Skus 2016-Datacenter -Version latest | Add-AzureRmVMNetworkInterface -Id $nic.Id 
 # Create the virtual machine with New-AzureRmVM.
-New-AzureRmVM -ResourceGroupName albps -Location westus -VM $vmConfig
+New-AzureRmVM -ResourceGroupName albps -Location westus2 -VM $vmConfig
 
 ###########################################################################
 
@@ -464,7 +437,7 @@ $healthProbe = New-AzureRmLoadBalancerProbeConfig -Name HealthProbe -Protocol Tc
 $lbrule = New-AzureRmLoadBalancerRuleConfig -Name HTTP -FrontendIpConfiguration $frontendIP -BackendAddressPool  $beAddressPool -Probe $healthProbe -Protocol Tcp -FrontendPort 80 -BackendPort 80
 
 # Create the load balancer by using the previously created objects.
-$NRPLB = New-AzureRmLoadBalancer -ResourceGroupName albps -Name LoadBalancerPS -Location westus `
+$NRPLB = New-AzureRmLoadBalancer -ResourceGroupName albps -Name LoadBalancerPS -Location westus2 `
 -FrontendIpConfiguration $frontendIP -LoadBalancingRule $lbrule -BackendAddressPool $beAddressPool -Probe $healthProbe
 # (optional ) -InboundNatRule $inboundNATRule1,$inboundNatRule2 `
 
@@ -495,16 +468,17 @@ Set-AzureRmNetworkInterface -NetworkInterface $nic
 Set-AzureRmNetworkInterface -NetworkInterface $nic2
 
 
-########################################
-# Note: Why I am not creating NICs? Instead I am using VM's in an availability set and I'll use their NIC's later
-#################################################################################################################
+###############################################################################
+# Note: Why I am not creating NICs? 
+# Instead I am using VM's in an availability set and I'll use their NIC's later
+###############################################################################
 
 
 Get-AzureRmResource | select name, resourcetype, resourcegroupname, location
 
 Get-AzureRmPublicIpAddress | select name, ipaddress
-
 # get IP address and open in a browser
+
 
 $albip = Get-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps
 $albip = $albip.IpAddress 
@@ -537,7 +511,7 @@ get-azurermpublicipaddress | select name, ipaddress
 # Relative DNS Name needs to be unique in Azure global
 $profile = New-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile `
 -ResourceGroupName TrafficPS -TrafficRoutingMethod Weighted `
--RelativeDnsName kolketrafficpshdemo -Ttl 30 -MonitorProtocol `
+-RelativeDnsName kolketrafficpsdemo -Ttl 30 -MonitorProtocol `
 HTTP -MonitorPort 80 -MonitorPath "/"
 
 $ip1 = Get-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps
@@ -551,7 +525,7 @@ New-AzureRmTrafficManagerEndpoint -Name AGWPS -ProfileName MyTrafficMgrProfile `
  -EndpointStatus Enabled
 
 #make sure you change subdomain name to match TM profile name
-start-process http://kolketrafficpshdemo.trafficmanager.net
+start-process http://kolketrafficpsdemo.trafficmanager.net
 
 # More about trafficmgr and powershell
 # https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-powershell-arm#create-a-traffic-manager-profile
@@ -619,5 +593,38 @@ powershell completed these scenarios:
 # - monitoring 
 # - security
 # - view resources in portal 
- 
- 
+
+
+############## sidebar's ############################################
+# The following is not part of this exercise 
+# 
+Get-AzureRmADUser
+
+### if you have execution policy problems?
+# execution scope policy info
+Get-ExecutionPolicy -list
+# to bypass execution policy
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+# set current user allsigned-force ### - great for workshop 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy AllSigned -Force
+
+#get resource groups
+Get-AzureRmResourceGroup
+
+#get resources
+Get-AzureRMResource 
+
+Get-AzureRmResource | select name, kind, location
+Get-AzureRmResource | select name, resourcetype, resourcegroupname,location
+
+#get resources in specific resource group 
+Get-AzureRmResource | Where-Object { $_.ResourceGroupName -eq "myjenkins"}
+Get-AzureRmResource | ? { $_.Name -like "*blah*"}
+#Contains Like - CLike - case sensitive plus *
+Get-AzureRmResource | Where-Object { $_.ResourceGroupName -CLike "*blah*"} | select name, resourcetype
+
+#delete resource group (and all the resources therein) 
+# Remove-AzureRmResourceGroup -Name blah
+
+Start-Process -FilePath "http://portal.azure.com" 
+
