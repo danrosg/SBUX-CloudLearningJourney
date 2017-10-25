@@ -8,3 +8,5 @@ az group deployment validate --resource-group dotnetno3 --template-file template
 # use to actually deploy 
 az group deployment create --resource-group dotnetno3 --template-file template.json --parameters parameters.json
 
+Details and more options:
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy-cli
