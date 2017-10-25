@@ -17,3 +17,7 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName ExampleResourceGroup `
 -TemplateParameterFile c:\MyTemplates\storage.parameters.json
 
 
+More on this: 
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-template-deploy
+
+
