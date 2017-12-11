@@ -133,6 +133,8 @@ az network application-gateway create --name AppGateway01 --resource-group agw -
 # Get IPs 
 az network public-ip list -g agw --output table 
 
+az network public-ip list -g agw --output tsv 
+
 ## RDP connection 
 mstsc /v: ${ipaddresses}
 
