@@ -545,7 +545,7 @@ cls
 # and load balancing between multiple data centers
 
 # Traffic manager Docs
-# 
+# https://docs.microsoft.com/en-us/powershell/module/azurerm.trafficmanager/?view=azurermps-5.2.0
 
 New-AzureRMResourceGroup -name TrafficPS -location westus
 
