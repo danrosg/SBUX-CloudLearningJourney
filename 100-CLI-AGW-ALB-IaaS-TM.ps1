@@ -1,6 +1,6 @@
 ##############################################################################
 
-#  CLI 2.0 Examples - Equivalent exercise to Powershell ALB/AGW exercise     #
+#  CLI 2.0 ALB/AGW/TM exercise                                               #
 
 ##############################################################################
 # 
@@ -52,6 +52,9 @@ clear
 az group create --name AGW --location eastus
 
 ##############################################################################
+#
+# Storage accounts - 
+# we use storage accounts for storing disk image and boot diagnostics/logs
 
 # Create a new premium storage account for our vm's (name must be unique in AZ)
 az storage account create --name agw2018storekolke01 --location eastus --resource-group agw --sku premium_lrs
@@ -131,7 +134,7 @@ az vm availability-set create --name ASetAGW --resource-group agw --platform-fau
 az vm create --name agw-vm-01 --resource-group agw --vnet-name AGWvnet --subnet AGWVMs --admin-password ************** --admin-username mycliadmin --availability-set ASetAGW --location eastus --nsg agw-nsg --image Win2016Datacenter --public-ip-address agw-ip01 --size Standard_DS1_v2 
 
 # What types of VM's are these? We are using "managed disks". 
-# Mora about managing VM's with CLI
+# More about managing VM's with CLI
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/cli-manage
 # docs: https://docs.microsoft.com/en-us/cli/azure/vm#create
 # az vm list-sizes --location eastus --output table
