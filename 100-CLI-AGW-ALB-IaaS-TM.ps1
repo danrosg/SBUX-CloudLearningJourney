@@ -455,9 +455,10 @@ start chrome http://kolketmgrclidemo.trafficmanager.net
 #                         notes
 
 ##############################################################################
-# We CLI 2.0 completed these scenarios: 
-# resourcegroup
-# nsg
+# With CLI 2.0 we have completed these scenarios: 
+#
+# resourcegroup's x3
+# nsg x2 
 # vnets + subnets
 # availability sets
 # AppGW 
