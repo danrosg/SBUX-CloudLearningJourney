@@ -283,26 +283,24 @@ start-azurermvm -ResourceGroupName agwps -name agwpsvm-02
 # This completes the app gateway scenario
 
 
-#######################################################################
+##############################################################################
  
-#                 Azure Load Balancer Scenario                        #
-#                               WestUS                                #
+#                 Azure Load Balancer Scenario                        
 
-#######################################################################
+##############################################################################
+# This Scenario builds the following
+#   WEST --> Resource Group - ALB + VNETs/Subnets - 2 VM's in Availability Set
 
-
-
-#   Create Resource group for ALBPS scenario
-cls
+cls 
+##############################################################################
+# Start with a New Resource Group
+# Create a group for ALB
 
 New-AzureRMResourceGroup -name ALBPS -location westus2
 
-
-
-###################################################
+##############################################################################
 
 # Create a new premium storage account.
-
 New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn01 -Location westus2 `
 -ResourceGroupName ALBPS -SkuName Premium_LRS
 
@@ -310,14 +308,12 @@ New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn01 -Location wes
 New-AzureRmStorageAccount –StorageAccountName albpsstoragesavn02 -Location westus2 `
 -ResourceGroupName ALBPS -SkuName Standard_LRS
 
-
-##########################################################
-
-
-#########################################################
-# Create Network Security Group 
-# Rules first
-# Then Create NSG + Rules
+##############################################################################
+#
+# Network Security Group (NSG's)
+#
+# First Create Network Security Group 
+# Then Create NSG Rules for traffic allow/deny
 
 # NSG rules
 $rule1 = New-AzureRmNetworkSecurityRuleConfig -Name web-rule -Description "Allow HTTP" `
@@ -336,7 +332,14 @@ $nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName albps -Location westus
 $nsg
 
 
-##############################################################
+##############################################################################
+# 
+#                Virtual Networks and Subnets 
+#
+# We will create a Vnet + 2 Subnets:
+# 1 Subnet is for the ALB, #
+# 1 Subnet for the VM's
+#
 # create new virtual network 
 New-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet `
 -AddressPrefix 10.0.0.0/16 -Location westus2
@@ -345,28 +348,19 @@ New-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet `
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet
 
 #add a subnet to the new vnet variable
-
 Add-AzureRmVirtualNetworkSubnetConfig -Name FrontEnd01 `
 -VirtualNetwork $vnet -AddressPrefix 10.0.1.0/24
 
-Add-AzureRmVirtualNetworkSubnetConfig -Name FrontEnd02 `
--VirtualNetwork $vnet -AddressPrefix 10.0.2.0/24
-
-## repeat above for each subnet you want to add
-## don't know what to choose for AddressPrefix if I add more
+#Add-AzureRmVirtualNetworkSubnetConfig -Name FrontEnd02 `
+#-VirtualNetwork $vnet -AddressPrefix 10.0.2.0/24
 
 # add subnet for backend 
-Add-AzureRmVirtualNetworkSubnetConfig -Name BackEnd01 `
--VirtualNetwork $vnet -AddressPrefix 10.0.3.0/24
+# Add-AzureRmVirtualNetworkSubnetConfig -Name BackEnd01 `
+# -VirtualNetwork $vnet -AddressPrefix 10.0.3.0/24
 
-Add-AzureRmVirtualNetworkSubnetConfig -Name BackEnd02 `
--VirtualNetwork $vnet -AddressPrefix 10.0.4.0/24
+# Add-AzureRmVirtualNetworkSubnetConfig -Name BackEnd02 `
+# -VirtualNetwork $vnet -AddressPrefix 10.0.4.0/24
 
-# Although you create subnets, they currently only exist in the 
-# local variable used to retrieve the VNet you create in the step above. 
-# To save the changes to Azure, run the following command:
-
-# note: long running process? not really...
 Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 
 # Remove-AzureRmVirtualNetwork -name <name> -ResourceGroupName <group>
@@ -376,29 +370,25 @@ Set-AzureRmVirtualNetwork -VirtualNetwork $vnet
 Get-AzureRmResource | select name, resourcetype, resourcegroupname, location
 
 ##########################################################################
-
-# create ip addresses for vm's
-
+# Virtual IP Addresses 
+#
+# Create 2 New IP Addresses for 2 new VM's (DNS names must be unique)
 New-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps  `
 -AllocationMethod Static -DomainNameLabel albpsvmip01 -Location westus2
 
 New-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps  `
 -AllocationMethod Static -DomainNameLabel albpsvmip02 -Location westus2
 
-# Create IP for ALB 
-New-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps `
--AllocationMethod Static -Location westus2 -DomainNameLabel albpspubip
-
 # Get Public IP Address
 Get-AzureRmPublicIpAddress -ResourceGroupName albps | select name, ipaddress 
 Get-AzureRMResource | Where-Object {$_.name -like "*albps*"} | select name, ipaddress
 
 
-##########################################################
+###############################################################################
 
-# create 2 vm's in availability set using just powershell 
+# Create Availability Set's and Virtual Machines
 
-# create availability set 
+# create availability set for 2 vm's
 New-AzureRmAvailabilitySet -ResourceGroupName "albps" -Name "ALBps-ASet" -Location westus2 `
 -PlatformFaultDomainCount 2 -PlatformUpdateDomainCount 2 -Sku Aligned
 
@@ -409,21 +399,11 @@ $nsg = Get-AzureRmNetworkSecurityGroup -name ALBps-nsg -ResourceGroupName albps
 $pip = Get-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps 
 $nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-01 -ResourceGroupName albps -Location westus2 `
     -SubnetId $vnet.Subnets[0].Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
-
-# Create a virtual machine configuration. This configuration includes the settings that are used
-#  when deploying the virtual machine such as a virtual machine image, size, and authentication configuration. 
-#  When running this step, you are prompted for credentials. The values that you enter are configured 
-#  as the user name and password for the virtual machine. 
-
-# Define a credential object
 $cred = Get-Credential
-
-# Create a virtual machine configuration
-$vmConfig = New-AzureRmVMConfig -VMName albpsvm-01 -VMSize Standard_DS1_v2 -AvailabilitySetID $AvailabilitySet.Id | `
+$vmConfig = New-AzureRmVMConfig -VMName albpsvm-01 -VMSize Standard_F2S_v2 -AvailabilitySetID $AvailabilitySet.Id | `
     Set-AzureRmVMOperatingSystem -Windows -ComputerName albpsvm-01 -Credential $cred | `
     Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer `
     -Skus 2016-Datacenter -Version latest | Add-AzureRmVMNetworkInterface -Id $nic.Id 
-    
 # Create the virtual machine with New-AzureRmVM.
 # Note: Long running process 
 New-AzureRmVM -ResourceGroupName albps -Location westus2 -VM $vmConfig
@@ -438,7 +418,7 @@ $pip = Get-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps
 $nic = New-AzureRmNetworkInterface -Name ALBpsvmNIC-02 -ResourceGroupName albps -Location westus2 `
     -SubnetId $vnet.Subnets[0].Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
 $cred = Get-Credential
-$vmConfig = New-AzureRmVMConfig -VMName albpsvm-02 -VMSize Standard_DS1_v2 -AvailabilitySetID $AvailabilitySet.Id | `
+$vmConfig = New-AzureRmVMConfig -VMName albpsvm-02 -VMSize Standard_F2S_v2 -AvailabilitySetID $AvailabilitySet.Id | `
     Set-AzureRmVMOperatingSystem -Windows -ComputerName albpsvm-02 -Credential $cred | `
     Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer `
     -Skus 2016-Datacenter -Version latest | Add-AzureRmVMNetworkInterface -Id $nic.Id 
@@ -447,13 +427,16 @@ New-AzureRmVM -ResourceGroupName albps -Location westus2 -VM $vmConfig
 
 ###########################################################################
 
-
-## RDP connection - rdp to machines and setup webservers
-$pip1 = Get-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps 
-$pip2 = Get-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps 
-
+## RDP to machines and setup inet tools and edit home page to say which vm it is
 # install webserver tools - run powershell on windows vm - copy & run on VMS
 # Install-WindowsFeature -name Web-Server -IncludeManagementTools
+
+# Also, edit VM's webserver homepage with name of each machine so we can identify in tests
+# c:\inetpub\wwwroot\iistart.html
+#  ie.  <h1>ALB-PS-VM-01</h1> vs <h1>ALB-PS-VM-02</h1>
+
+$pip1 = Get-AzureRmPublicIpAddress -Name albpsvm-ip01 -ResourceGroupName albps 
+$pip2 = Get-AzureRmPublicIpAddress -Name albpsvm-ip02 -ResourceGroupName albps 
 
 ## RDP connection
 mstsc /v: $pip1.IpAddress
@@ -467,6 +450,9 @@ mstsc /v: $pip2.IpAddress
 #  Create Azure Load Balancing                                           #
 
 ##########################################################################
+# Create IP for ALB 
+New-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps `
+-AllocationMethod Static -Location westus2 -DomainNameLabel albpspubip
 
 # get ip etc # set variables
 $publicIP = Get-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps 
@@ -480,7 +466,7 @@ $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName albps -Name ALBPS-VNet
 
 # Create a health probe. There are two ways to configure a probe:
 # HTTP probe (two methods)
-#   $healthProbe = New-AzureRmLoadBalancerProbeConfig -Name HealthProbe -RequestPath 'HealthProbe.aspx' -Protocol http -Port 80 -IntervalInSeconds 15 -ProbeCount 2
+#  $healthProbe = New-AzureRmLoadBalancerProbeConfig -Name HealthProbe -RequestPath 'HealthProbe.aspx' -Protocol http -Port 80 -IntervalInSeconds 15 -ProbeCount 2
 # TCP probe
 $healthProbe = New-AzureRmLoadBalancerProbeConfig -Name HealthProbe -Protocol Tcp -Port 80 -IntervalInSeconds 15 -ProbeCount 2
 
@@ -506,7 +492,7 @@ Get-AzureRmLoadBalancerBackendAddressPoolConfig -Name "LB-Backend" -LoadBalancer
 # load backendpool config into variable
 $backend = Get-AzureRmLoadBalancerBackendAddressPoolConfig -Name "LB-Backend" -LoadBalancer $loadbalancer
 
-# Load the Network interface- into a variable. The variable name is $nic. 
+# Load the Network interface- into a variable. The variable name is $nic and $nic2
 $nic = get-azurermnetworkinterface -name ALBpsvmNIC-01 -resourcegroupname albps
 $nic2 = get-azurermnetworkinterface -name ALBpsvmNIC-02 -resourcegroupname albps
 
@@ -520,24 +506,22 @@ Set-AzureRmNetworkInterface -NetworkInterface $nic2
 
 
 ###############################################################################
-# Note: Why I am not creating NICs? 
-# Instead I am using VM's in an availability set and I'll use their NIC's later
-###############################################################################
 
-
+# What have we created so far? 
 Get-AzureRmResource | select name, resourcetype, resourcegroupname, location
 
+# What are the IP addresses of the resources we have created?
 Get-AzureRmPublicIpAddress | select name, ipaddress
-# get IP address and open in a browser
 
-
+# Lets test our ALB by getting IP address and open in a browser.
 $albip = Get-AzureRmPublicIpAddress -Name ALBpsPubip -ResourceGroupName albps
 $albip = $albip.IpAddress 
+
 Start-Process -Filepath http://$albip
 
 start chrome http://$albip
 
-# To demo failover, stop the vm that's showing in browser, or try different browsers
+# To test/demo failover, stop the vm that's showing in browser, or try different browsers
 
 #Alb VM's -  
 stop-azurermvm -ResourceGroupName albps -name albpsvm-01 -force
@@ -548,18 +532,27 @@ start-azurermvm -ResourceGroupName albps -name albpsvm-01
 start-azurermvm -ResourceGroupName albps -name albpsvm-02 
 
 
+# end Azure Load Balancer Scenario 
 
-
-####################### create traffic manager profile #################
 cls
+
+
+##############################################################################
+#
+#       Traffic manager   
+#
+# Traffic manager is DNS level traffic routing, ideal for disaster recovery
+# and load balancing between multiple data centers
+
+# Traffic manager Docs
+# 
 
 New-AzureRMResourceGroup -name TrafficPS -location westus
 
 ########################################################
 
-get-azurermpublicipaddress | select name, ipaddress
+# Create Traffic Manager Profile (DNS name must be unique )
 
-# Relative DNS Name needs to be unique in Azure global
 $profile = New-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile `
 -ResourceGroupName TrafficPS -TrafficRoutingMethod Weighted `
 -RelativeDnsName kolketrafficpsdemo -Ttl 30 -MonitorProtocol `
@@ -575,27 +568,15 @@ New-AzureRmTrafficManagerEndpoint -Name AGWPS -ProfileName MyTrafficMgrProfile `
  -ResourceGroupName trafficps -Type AzureEndpoints -TargetResourceId $ip2.Id `
  -EndpointStatus Enabled
 
-#make sure you change subdomain name to match TM profile name
+#make sure you change subdomain name to match TM profile name in url below
 start-process http://kolketrafficpsdemo.trafficmanager.net
 
 # More about trafficmgr and powershell
 # https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-powershell-arm#create-a-traffic-manager-profile
 # 
 
-Login-AzureRmAccount
 
-# Disable Traffic Manager Profile
-Disable-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile -ResourceGroupName trafficps  -Force
-
-#ALB VM's - in an availability set   
-
-
-#App GW VM's - stand alone in subnet in same VNet as AppGW 
-
-
-Get-AzureRmVM -Status | Select ResourceGroupName, Name, PowerState
-
-
+# Test failover by stopping/starting VM's 
 #App GW VM's -
 stop-azurermvm -ResourceGroupName agwps -name agwpsvm-01 -force
 stop-azurermvm -ResourceGroupName agwps -name agwpsvm-02 -force
@@ -612,13 +593,15 @@ stop-azurermvm -ResourceGroupName albps -name albpsvm-02 -force
 start-azurermvm -ResourceGroupName albps -name albpsvm-01  
 start-azurermvm -ResourceGroupName albps -name albpsvm-02 
 
+# Disable Traffic Manager Profile
+Disable-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile -ResourceGroupName trafficps  -Force
 
-Get-AzureRmVM -Status | Select ResourceGroupName, Name, PowerState
-
-#Enable TM
+# Enable TM
 Enable-AzureRmTrafficManagerProfile -Name MyTrafficMgrProfile -ResourceGroupName trafficps
 
-start-process http://kolketrafficpsdemo.trafficmanager.net
+
+# Helpful PS cmdlet for checking VM's powerstate...
+Get-AzureRmVM -Status | Select ResourceGroupName, Name, PowerState
 
 
 
@@ -628,19 +611,21 @@ start-process http://kolketrafficpsdemo.trafficmanager.net
 #                         notes
 
 #############################################################################
-<#
-powershell completed these scenarios: 
-- resourcegroup
-- nsg
-- AppGW 
-- ALB
-- VMs x 4
-- Test ALB + AppGW 
-- Traffic Manager 
-#> 
 
-# where from here? ideas...
+# With powershell we have built and tested these scenarios: 
+#
+# resourcegroup's x3 
+# nsg's x2 
+# vnets + subnets
+# availability sets
+# AppGW 
+# ALB
+# VMs x 4
+# Test ALB + AppGW 
+# Traffic Manager 
+#
 # - add vm / arm template, start with portal
+# - add webapp, cosmosdb
 # - monitoring 
 # - security
 # - view resources in portal 
@@ -661,6 +646,9 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy AllSigned -Force
 
 #get resource groups
 Get-AzureRmResourceGroup
+
+# Helpful PS cmdlet for checking VM's powerstate...
+Get-AzureRmVM -Status | Select ResourceGroupName, Name, PowerState
 
 #get resources
 Get-AzureRMResource 
