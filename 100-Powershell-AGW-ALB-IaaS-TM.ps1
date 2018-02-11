@@ -336,9 +336,9 @@ $nsg
 # 
 #                Virtual Networks and Subnets 
 #
-# We will create a Vnet + 2 Subnets:
-# 1 Subnet is for the ALB, #
+# We will create a Vnet + 1 Subnet:
 # 1 Subnet for the VM's
+# Note: ALB, unlike AGW - does not need to be in a Subnet 
 #
 # create new virtual network 
 New-AzureRmVirtualNetwork -ResourceGroupName ALBPS -Name ALBPS-VNet `
@@ -447,7 +447,7 @@ mstsc /v: $pip2.IpAddress
 
 ##########################################################################
 
-#  Create Azure Load Balancing                                           #
+#  Create Azure Load Balancer
 
 ##########################################################################
 # Create IP for ALB 
