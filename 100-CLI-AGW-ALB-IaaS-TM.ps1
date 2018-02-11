@@ -254,17 +254,16 @@ az network nsg rule list --resource-group agw --nsg-name agw-nsg --output table
 # 
 #                Virtual Networks and Subnets 
 #
-# We will create a Vnet + 2 Subnets:
-# 1 Subnet is for the ALB, #
+# We will create a Vnet + 1 Subnet:
 # 1 Subnet for the VM's
+# Note: ALB, unlike AGW - does not need to be in a Subnet 
 #
 # create new virtual network & subnet 10.0.1.0/24 
 az network vnet create --name ALB-VNet --resource-group alb --address-prefixes 10.0.0.0/16 --location westus2 --subnet-name ALB-VNet --subnet-prefix 10.0.1.0/24 
 
-### error don't need ALB Subnet: az network vnet create --name ALB-VNet --resource-group alb --address-prefixes 10.0.0.0/16 --location westus2 --subnet-name ALB --subnet-prefix 10.0.0.0/24 
-
 ## Let's double check that the Subnet was created before continuing 
 az network vnet subnet list --vnet-name ALB-VNet --resource-group alb --output table
+
 
 ## if no subnet, we need to create it using the following, if it's there move on...
 # -Name FrontEnd01 -AddressPrefix 10.0.1.0/24
@@ -277,6 +276,7 @@ az network vnet subnet list --vnet-name ALB-VNet --resource-group alb --output t
 # az network vnet subnet create --address-prefix 10.0.3.0/24 --name BackEnd01 --resource-group alb --vnet-name ALB-VNet
 # -Name BackEnd02 -AddressPrefix 10.0.4.0/24
 # az network vnet subnet create --address-prefix 10.0.4.0/24 --name BackEnd02 --resource-group alb --vnet-name ALB-VNet
+### note: We don't need to put ALB in a Subnet, ie: az network vnet create --name ALB-VNet --resource-group alb --address-prefixes 10.0.0.0/16 --location westus2 --subnet-name ALB --subnet-prefix 10.0.0.0/24 
 
 # Get list of subnets in this VNet
 az network vnet subnet list --vnet-name ALB-VNet --resource-group alb --output table
