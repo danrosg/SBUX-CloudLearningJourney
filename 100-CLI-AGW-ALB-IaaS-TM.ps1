@@ -305,11 +305,11 @@ az vm availability-set create -n ASetforALB -g alb --platform-fault-domain-count
 
 # Create VM #1 and nic - assign IP we already created  
 # remember to change the username and password 
-az vm create --name alb-vm-01 --resource-group alb --vnet-name ALB-VNet --subnet FrontEnd01 --admin-password ************ --admin-username mycliadmin --availability-set ASetforALB --location westus2 --nsg alb-nsg --public-ip-address alb-ip01 --image Win2016Datacenter --size Standard_F2S_v2 
+az vm create --name alb-vm-01 --resource-group alb --vnet-name ALB-VNet --subnet FrontEnd01 --admin-password ************* --admin-username mycliadmin --availability-set ASetforALB --location westus2 --nsg alb-nsg --public-ip-address alb-ip01 --image Win2016Datacenter --size Standard_F2S_v2 
            
 # Create VM #2 and nic - assign IP#2 we already created
 # remember to change username and password
-az vm create --name alb-vm-02 --resource-group alb --vnet-name ALB-VNet --subnet FrontEnd01 --admin-password ************ --admin-username mycliadmin --availability-set ASetforALB --location westus2 --nsg alb-nsg --public-ip-address alb-ip02 --image Win2016Datacenter --size Standard_F2S_v2 
+az vm create --name alb-vm-02 --resource-group alb --vnet-name ALB-VNet --subnet FrontEnd01 --admin-password ************* --admin-username mycliadmin --availability-set ASetforALB --location westus2 --nsg alb-nsg --public-ip-address alb-ip02 --image Win2016Datacenter --size Standard_F2S_v2 
 
 az vm list -g alb --output table 
 
