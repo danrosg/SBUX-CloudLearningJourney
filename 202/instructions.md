@@ -13,8 +13,9 @@ How can I use an Azure Resource Manager template to deploy and integrate an Azur
   <li>Edit the parameters 
   <li>Deploy using the CLI or Powershell deployment scripts (remember to validate before you deploy)
 </ol>
-To use the application, simply navigate to the web app URL 
-(in the example above, the URL would be http://nameyouenterede.azurewebsites.net). You'll see the following web application:
+<h3>Once deployment is complete</h3>
+You can try using the application. simply navigate to the web app URL 
+(the URL would be something like http://nameyouenterede.azurewebsites.net). You'll see the following web application:
 Sample Todo application
 
 <img src="https://docs.microsoft.com/en-us/azure/cosmos-db/media/create-website/image2.png">
@@ -29,4 +30,6 @@ Run the default query, "SELECT * FROM c" and inspect the results. Notice that th
 Screenshot of the Query Explorer and Results blades showing the query results
 
 
-Feel free to explore the Azure Cosmos DB portal experience or modify the sample Todo application. When you're ready, let's deploy another template.
+Feel free to explore the Azure Cosmos DB portal experience or modify the sample Todo application. 
+
+
