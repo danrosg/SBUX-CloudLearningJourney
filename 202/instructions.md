@@ -1,6 +1,18 @@
-
-Edit the parameters and deploy using the CLI or Powershell deployment templates.
-
+<h1>ARM Template CosmosDB + Web App Deployment</h1>
+<p>
+This tutorial shows you how to use an Azure Resource Manager template to deploy and integrate Microsoft Azure Cosmos DB, an Azure App Service web app, and a sample web application.
+<p>
+Using Azure Resource Manager templates, you can easily automate the deployment and configuration of your Azure resources. This tutorial shows how to deploy a web application and automatically configure Azure Cosmos DB account connection information.
+<p>
+After completing this tutorial, you will be able to answer the following questions:
+<p>
+How can I use an Azure Resource Manager template to deploy and integrate an Azure Cosmos DB account and a web app in Azure App Service?
+<h3>What to do?</h3>
+<ol>
+  <li>Save Parameters and Template files to local machine
+  <li>Edit the parameters 
+  <li>Deploy using the CLI or Powershell deployment scripts (remember to validate before you deploy)
+</ol>
 To use the application, simply navigate to the web app URL 
 (in the example above, the URL would be http://nameyouenterede.azurewebsites.net). You'll see the following web application:
 Sample Todo application
