@@ -33,4 +33,20 @@ Screenshot of the Query Explorer and Results blades showing the query results
 Feel free to explore the Azure Cosmos DB portal experience or modify the sample Todo application. 
 <hr>
 <p>This is taken from this example https://docs.microsoft.com/en-us/azure/cosmos-db/create-website. We have downloaded the ARM templates already, so you edit locally and deploy. 
+<hr>
+<h1>About CosmosDB</h1>
+<p>Azure Cosmos DB is Microsoft's globally distributed, multi-model database. With the click of a button, Azure Cosmos DB enables you to elastically and independently scale throughput and storage across any number of Azure's geographic regions. It offers throughput, latency, availability, and consistency guarantees with comprehensive service level agreements (SLAs), something no other database service can offer. You can Try Azure Cosmos DB for free without an Azure subscription, free of charge and commitments.
+<br>https://docs.microsoft.com/en-us/azure/cosmos-db/introduction
+
+<img src="https://docs.microsoft.com/en-us/azure/cosmos-db/media/introduction/azure-cosmos-db.png">
+<hr>
+<h1>About Azure Web Apps</h1>
+Azure Web Apps enables you to build and host web applications in the programming language of your choice without managing infrastructure. It offers auto-scaling and high availability, supports both Windows and Linux, and enables automated deployments from GitHub, Visual Studio Team Services, or any Git repo. Learn how to use Azure Web Apps with our quickstarts, tutorials, and samples.
+<br><br>
+https://docs.microsoft.com/en-us/azure/app-service/
+
+<hr>
+
+
+
 
