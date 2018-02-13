@@ -1,3 +1,4 @@
+The following script is to modify existing app gateway to support load balancing 
 
 https://docs.microsoft.com/en-us/azure/application-gateway/application-gateway-web-app-powershell
 
