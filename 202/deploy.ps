@@ -1,16 +1,18 @@
-#######################################################
+###########################################################################
 # 
 #             POWERSHELL EXAMPLE
 #
 # Edit paramaters, change resource group name  
 # change FILEPATHE / directory to location of template 
-#
-#######################################################
+###########################################################################
 
-(ADD RG CREATE)
-
-# Make sure you are logged in   
+# Make sure you are logged in:
 Login-AzureRMAccount
+
+# You will need a resource group, so create if you don't have one:
+New-AzureRMResourceGroup -name ExampleResourceGroup -location selectLocationfromparameters
+
+# Edit parameters in parameters json file
 
 # use to validate a template for deployment
 Test-AzureRmResourceGroupDeployment -ResourceGroupName ExampleResourceGroup `
@@ -22,28 +24,32 @@ New-AzureRmResourceGroupDeployment -ResourceGroupName ExampleResourceGroup `
 -TemplateFile c:\MyTemplates\DocDBWebsiteTodo.json `
 -TemplateParameterFile c:\MyTemplates\parameters.json
 
-#when prompted for name, enter name in template parameters
+# when deploying and prompted for name, enter name in template parameters
 
-#######################################################
+##########################################################################
 #
 #           CLI 2.0 EXAMPLE
 #
-#
-#######################################################
+# Edit paramaters, change resource group name  
+# change FILEPATHE / directory to location of template 
+##########################################################################
 
 # CLI deployment script for MAC (note file path difference)
 
-(ADD RG CREATE )
+# Make sure you are you logged into the right account
+az login 
 
-# download an ARM template
-	# Edit paramaters 
-	# change directory to location of template 
+# you will need a resource group, so create if you don't have one
+az group create --name ExampleResourceGroup --location selectLocationfromparameters
+
+# Edit parameters in parameters json file
+# change directory to location of template 
 	
-	# use to validate a template for deployment
-	az group deployment validate --resource-group todo --template-file /Users/dannykolke/Downloads/DocDBWebsiteTodo.json --parameters /Users/dannykolke/Downloads/parameters.json
+# use to validate a template for deployment
+az group deployment validate --resource-group todo --template-file /Users/danny/Downloads/DocDBWebsiteTodo.json --parameters /Users/danny/Downloads/parameters.json
 
-	# use to actually deploy 
-	az group deployment create --resource-group todo --template-file /Users/dannykolke/Downloads/DocDBWebsiteTodo.json --parameters /Users/dannykolke/Downloads/parameters.json
+# use to actually deploy 
+az group deployment create --resource-group todo --template-file /Users/danny/Downloads/DocDBWebsiteTodo.json --parameters /Users/danny/Downloads/parameters.json
 
-	# for Windows use \ in file paith ie: C:\users\dakolke\desktop\template.json --parameters C:\Users\dakolke\Desktop\parameters.json
-	
+# for Windows use \ in file paith ie: C:\users\danny\Downloads\template.json --parameters C:\Users\danny\Downloads\parameters.json
+
