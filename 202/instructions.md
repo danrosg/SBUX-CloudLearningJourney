@@ -31,5 +31,6 @@ Screenshot of the Query Explorer and Results blades showing the query results
 
 
 Feel free to explore the Azure Cosmos DB portal experience or modify the sample Todo application. 
-
+<hr>
+<p>This is taken from this example https://docs.microsoft.com/en-us/azure/cosmos-db/create-website. We have downloaded the ARM templates already, so you edit locally and deploy. 
 
