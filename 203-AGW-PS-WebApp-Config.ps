@@ -1,11 +1,17 @@
 # The following script is to modify existing app gateway to support load balancing 
+
+# For this example to work, you must have already created a Web App and an Application Gateway
+
+# This example uses powershell: if you don't have powershell Azure module installed, you can run from the CloudShell in 
+# portal.azure.com - select powershell from CloudShell option instead of Bash
+
 # More details available here
 # https://docs.microsoft.com/en-us/azure/application-gateway/application-gateway-web-app-powershell
 
-# FQDN of the web app
+# FQDN of the web app (change to the domain name for you website)
 $webappFQDN = "kolkewordpressthing.azurewebsites.net"
 
-# Retrieve an existing application gateway
+# Retrieve an existing application gateway (change name of App Gateway and Resource Group)
 $gw = Get-AzureRmApplicationGateway -Name webaappgateway -ResourceGroupName kolkewordpressthing
 
 # Define the status codes to match for the probe
