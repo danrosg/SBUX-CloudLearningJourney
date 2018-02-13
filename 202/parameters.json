@@ -1,0 +1,18 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "siteName": {
+            "value": "enter_unique_site_subdomain"
+        },
+        "hostingPlanName": {
+            "value": "enter_hostingplan_name"
+        },
+        "Location": {
+            "value": "West US"
+        },
+        "databaseAccountName": {
+            "value": "enter_database_account_name"
+        }
+    }
+}

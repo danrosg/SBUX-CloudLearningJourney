@@ -1,0 +1,14 @@
+# CLI deployment script for MAC (note file path difference)
+
+# download an ARM template
+	# Edit paramaters 
+	# change directory to location of template 
+	
+	# use to validate a template for deployment
+	az group deployment validate --resource-group todo --template-file /Users/dannykolke/Downloads/DocDBWebsiteTodo.json --parameters /Users/dannykolke/Downloads/parameters.json
+
+	# use to actually deploy 
+	az group deployment create --resource-group todo --template-file /Users/dannykolke/Downloads/DocDBWebsiteTodo.json --parameters /Users/dannykolke/Downloads/parameters.json
+
+	# for Windows use \ in file paith ie: C:\users\dakolke\desktop\template.json --parameters C:\Users\dakolke\Desktop\parameters.json
+	
