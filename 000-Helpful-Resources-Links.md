@@ -4,7 +4,7 @@ https://azure.microsoft.com/en-us/blog/log-alerts-for-application-insights-previ
 
 # Azure Road Map
 https://azure.microsoft.com/en-us/roadmap/
-https://goo.gl/maps/vhpLDzxhAHL2
+https://goo.gl/maps/vhpLDzxhAHL2<br>
 
 
 # Quick Starts
