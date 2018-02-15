@@ -1,5 +1,11 @@
-# Presentations & Labs:
-Presentations and labs are at ___
+# Latest Greatest
+Log Alerts for Application Insights - (Preview)
+https://azure.microsoft.com/en-us/blog/log-alerts-for-application-insights-preview/ 
+
+# Azure Road Map
+https://azure.microsoft.com/en-us/roadmap/
+https://goo.gl/maps/vhpLDzxhAHL2
+
 
 # Quick Starts
 Remember the quick starts available at:
