@@ -1,9 +1,10 @@
-Notes about my Jenkins experiment. I think the code at the bottom and the articles referenced should help…
+Notes about my Jenkins experiment. 
+I think the code at the bottom and the articles referenced should help…
  
 Read this first:
 https://docs.microsoft.com/en-us/azure/jenkins/install-jenkins-solution-template
  
- 
+
 I put all my code in GitHub. Set up a personal account.
 https://docs.microsoft.com/en-us/azure/jenkins/execute-cli-jenkins-pipeline
 Created a token for git
