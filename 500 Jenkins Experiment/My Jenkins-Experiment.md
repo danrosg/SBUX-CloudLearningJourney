@@ -23,14 +23,21 @@ In Jenkins: Settings – Azure – need to setup Azure Service Principal in my J
  
  
 Once I am ready to deploy my code from GitHub to Azure with Jenkins
+
 1- Login to Jenkins
+
 2- Create new item – select - freestyle and name it
+
 3- no source code (I’m going to use shell to get code from git with my token)
+
 4- Bindings - Select “MSFT Azure Service Principal”
       (need to set up Azure Service Principal / SP in Jenkins prior to this, reference above)
+
 5- Build select “Execute Shell” (this code is my CLI 2.0 script in Jenkins)
  
+
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 
 gitrepo="https://github.com/mygithubaccount/webapp01.git"
 webappname="bobcoeswebapp"
