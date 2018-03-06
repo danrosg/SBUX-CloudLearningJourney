@@ -12,29 +12,15 @@ The End game. Equip you with knowledge and tools on how to go from where are now
 ## Not paint by the numbers  
 ## More of a hackathon less of a workshop – trying to make it relevant to what you will be doing in Azure 
 ## Group learning and Labs 
- 
-# Tips:  
-Naming conventions 
-Portal fundamentals / customization  
-Portal.azure.com http://portal.azure.com  
-Resource explorer http://resources.portal.com  
- 
+
+# Lots of Powershell and CLI
 # Creating and editing ARM templates 
 https://github.com/Azure/azure-quickstart-templates 
- 
+
+# IAAS, PAAS, and SAAS
 # Deploying with ARM templates – using PS, CLI, Portal  
  
 # Decoupling of services and resources, compute, storage, networking, et al.  
  
-What are ARM templates?  
-What? Where?  Portal, Github, Other? 
-
-Azure Quick Start Templates 
-https://github.com/Azure/azure-quickstart-templates 
- 
-List of All Az Image Templates: (CLI)  
-https://docs.microsoft.com/en-us/azure/virtual-machines/linux/cli-ps-findimage 
- 
-List All Image Publishers (PS) 
-https://docs.microsoft.com/en-us/powershell/module/azurerm.compute/get-azurermvmimagepublisher?view=azurermps-4.0.0 
- 
+# Start with getting to Know the class
+Name, Group at Starbucks, Goals for Class/Azure, How long at Starbucks
