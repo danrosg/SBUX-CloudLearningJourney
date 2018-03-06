@@ -9,9 +9,10 @@ And modified to use localized ARM template deployment and CLI.
 This repository has the ARM template and parameters files that you need, along with the deployment script
 
 # Files 
-DocDBWebsiteTodo.json  --> ARM TEMPLATE
-parameters.json	Rename --> Parameter file for ARM Template
-deploy.azcli	---> Mac version of Deployment Script for VS Code
-deploy.ps	Rename --> Windows version (both Powershell and CLI)
-instructions.md	---> Email Instructions
-readme.md --> This file
+DocDBWebsiteTodo.json  --> ARM TEMPLATE<br>
+parameters.json	Rename --> Parameter file for ARM Template<br>
+deploy.azcli	---> Mac version of Deployment Script for VS Code<br>
+deploy.ps	Rename --> Windows version (both Powershell and CLI)<br>
+instructions.md	---> Email Instructions<br>
+readme.md --> This file<br>
+
